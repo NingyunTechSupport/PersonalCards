@@ -23,7 +23,9 @@
             --color-accent: #1E3A8A;
             --color-accent-light: #3B82F6;
             --color-accent-dark: #1E40AF;
-            --color-bg: #F8FAFC;
+            --color-bg-start: #EFF6FF;
+            --color-bg-mid: #F8FAFC;
+            --color-bg-end: #FEF2F2;
             --color-card-bg: #FFFFFF;
             --color-card-bg-secondary: #F1F5F9;
             --color-text: #0F172A;
@@ -48,12 +50,52 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: var(--font-family);
-            background: linear-gradient(135deg, #EFF6FF 0%, #F8FAFC 50%, #FEF2F2 100%);
+            /* 与寧雲名片完全一致的亮色调渐变背景 */
+            background: linear-gradient(160deg, var(--color-bg-start) 0%, var(--color-bg-mid) 35%, var(--color-bg-end) 70%, var(--color-bg-start) 100%);
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ===== 动态浮动光晕（与寧雲名片完全一致） ===== */
+        .bg-decoration {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+            filter: blur(80px);
+            will-change: transform;
+        }
+        .bg-decoration--1 {
+            width: 450px; height: 450px;
+            background: radial-gradient(circle, rgba(220,38,38,0.15) 0%, transparent 70%);
+            top: -15%; right: -10%;
+            animation: floatSlow 20s ease-in-out infinite;
+        }
+        .bg-decoration--2 {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(30,58,138,0.15) 0%, transparent 70%);
+            bottom: -12%; left: -8%;
+            animation: floatSlow 25s ease-in-out infinite reverse;
+        }
+        .bg-decoration--3 {
+            width: 280px; height: 280px;
+            background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%);
+            top: 40%; left: 55%;
+            animation: floatSlow 22s ease-in-out infinite 3s;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -40px) scale(1.08); }
+            50% { transform: translate(-20px, 25px) scale(0.94); }
+            75% { transform: translate(-35px, -20px) scale(1.04); }
         }
 
         .card {
@@ -66,6 +108,9 @@
             border: 1px solid var(--color-border);
             position: relative;
             overflow: hidden;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .card::before {
@@ -90,29 +135,19 @@
             .header { flex-wrap: nowrap; text-align: left; justify-content: flex-start; }
         }
 
-        .avatar-wrapper {
-            flex-shrink: 0;
-            position: relative;
-        }
+        .avatar-wrapper { flex-shrink: 0; position: relative; }
         .avatar {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
+            width: 90px; height: 90px;
+            border-radius: 50%; object-fit: cover;
             border: 4px solid var(--color-avatar-border);
             box-shadow: 0 4px 12px var(--color-shadow);
             background: #E2E8F0;
         }
         .avatar-placeholder {
-            width: 90px;
-            height: 90px;
+            width: 90px; height: 90px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            font-weight: 700;
-            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; font-weight: 700; color: #fff;
             background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
             border: 4px solid var(--color-avatar-border);
         }
@@ -134,186 +169,91 @@
             50% { box-shadow: 0 0 0 8px rgba(34,197,94,0.08); }
         }
 
-        .profile-info h1 {
-            font-size: 1.7rem;
-            font-weight: 700;
-            color: var(--color-text);
-        }
-        .profile-info .title {
-            font-size: 1rem;
-            color: var(--color-primary);
-            font-weight: 600;
-            margin-top: 4px;
-        }
-        .profile-info .company {
-            font-size: 0.875rem;
-            color: var(--color-text-muted);
-            margin-top: 2px;
-        }
+        .profile-info h1 { font-size: 1.7rem; font-weight: 700; color: var(--color-text); }
+        .profile-info .title { font-size: 1rem; color: var(--color-primary); font-weight: 600; margin-top: 4px; }
+        .profile-info .company { font-size: 0.875rem; color: var(--color-text-muted); margin-top: 2px; }
 
-        .divider {
-            height: 1px;
-            background: var(--color-border);
-            margin: 20px 0;
-        }
+        .divider { height: 1px; background: var(--color-border); margin: 20px 0; }
 
         .bio {
-            font-size: 0.9rem;
-            color: var(--color-text-secondary);
+            font-size: 0.9rem; color: var(--color-text-secondary);
             background: var(--color-card-bg-secondary);
-            padding: 14px 16px;
-            border-radius: var(--radius-md);
+            padding: 14px 16px; border-radius: var(--radius-md);
             border-left: 3px solid var(--color-primary);
             margin-bottom: 20px;
         }
 
         .section-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--color-text-muted);
-            margin-bottom: 10px;
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 10px;
         }
 
-        .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
+        .skills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
         .skill-tag {
-            background: var(--color-tag-bg);
-            color: var(--color-tag-text);
-            border: 1px solid var(--color-tag-border);
-            padding: 5px 14px;
-            border-radius: var(--radius-full);
-            font-size: 0.8rem;
-            font-weight: 500;
+            background: var(--color-tag-bg); color: var(--color-tag-text);
+            border: 1px solid var(--color-tag-border); padding: 5px 14px;
+            border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 500;
             transition: all var(--transition);
         }
-        .skill-tag.highlight {
-            background: var(--color-primary);
-            color: #fff;
-            border-color: var(--color-primary);
-        }
-        .skill-tag:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px var(--color-shadow);
-        }
+        .skill-tag.highlight { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+        .skill-tag:hover { transform: translateY(-2px); box-shadow: 0 4px 12px var(--color-shadow); }
 
         .contact-list {
-            list-style: none;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
+            list-style: none; display: grid; grid-template-columns: 1fr 1fr;
+            gap: 10px; margin-bottom: 20px;
         }
-        @media (max-width: 400px) {
-            .contact-list { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 400px) { .contact-list { grid-template-columns: 1fr; } }
 
         .contact-item {
-            background: var(--color-card-bg-secondary);
-            border-radius: var(--radius-sm);
-            padding: 10px 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            color: var(--color-text-secondary);
-            text-decoration: none;
-            transition: all var(--transition);
-            border: 1px solid transparent;
-            position: relative;
-            overflow: hidden;
+            background: var(--color-card-bg-secondary); border-radius: var(--radius-sm);
+            padding: 10px 12px; display: flex; align-items: center; gap: 8px;
+            font-size: 0.85rem; color: var(--color-text-secondary);
+            text-decoration: none; transition: all var(--transition);
+            border: 1px solid transparent; position: relative; overflow: hidden;
         }
         .contact-item--link { cursor: pointer; }
         .contact-item--link:hover {
-            background: var(--color-tag-bg);
-            border-color: var(--color-tag-border);
-            transform: translateX(3px);
-            color: var(--color-primary);
+            background: var(--color-tag-bg); border-color: var(--color-tag-border);
+            transform: translateX(3px); color: var(--color-primary);
         }
         .contact-item--link::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 10%; height: 80%;
-            width: 3px;
+            content: ''; position: absolute;
+            left: 0; top: 10%; height: 80%; width: 3px;
             background: linear-gradient(to bottom, #DC2626, #FFFFFF);
             border-radius: 2px;
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
+            transform: scaleY(0); transition: transform 0.3s ease;
         }
-        .contact-item--link:hover::before {
-            transform: scaleY(1);
-        }
+        .contact-item--link:hover::before { transform: scaleY(1); }
         .contact-icon {
-            font-size: 1.2rem;
-            flex-shrink: 0;
-            width: 34px; height: 34px;
-            background: #F1F5F9;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-shrink: 0; width: 34px; height: 34px;
+            background: #F1F5F9; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
             transition: all var(--transition);
         }
         .contact-item--link:hover .contact-icon {
-            background: var(--color-primary);
-            color: #fff;
-            transform: scale(1.08);
+            background: var(--color-primary); color: #fff; transform: scale(1.08);
         }
         .contact-text { flex: 1; min-width: 0; }
-        .contact-label {
-            font-size: 0.7rem;
-            color: var(--color-text-muted);
-            display: block;
-        }
-        .contact-value {
-            font-weight: 500;
-            color: var(--color-text);
-            word-break: break-all;
-        }
+        .contact-label { font-size: 0.7rem; color: var(--color-text-muted); display: block; }
+        .contact-value { font-weight: 500; color: var(--color-text); word-break: break-all; }
 
         .social-links {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-            justify-content: center;
+            display: flex; gap: 8px; flex-wrap: wrap;
+            margin-bottom: 20px; justify-content: center;
         }
         .social-btn {
-            flex: 0 1 auto;
-            background: var(--color-card-bg-secondary);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-full);
-            padding: 8px 24px;
-            text-align: center;
-            font-weight: 500;
-            color: var(--color-text-secondary);
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: all var(--transition);
-            cursor: pointer;
+            flex: 0 1 auto; background: var(--color-card-bg-secondary);
+            border: 1px solid var(--color-border); border-radius: var(--radius-full);
+            padding: 8px 24px; text-align: center; font-weight: 500;
+            color: var(--color-text-secondary); text-decoration: none;
+            font-size: 0.85rem; transition: all var(--transition); cursor: pointer;
         }
-        .social-btn:hover {
-            background: var(--color-accent);
-            color: #fff;
-            border-color: var(--color-accent);
-            transform: translateY(-2px);
-        }
-        .social-btn.bilibili:hover {
-            background: #FB7299;
-            border-color: #FB7299;
-        }
+        .social-btn:hover { background: var(--color-accent); color: #fff; border-color: var(--color-accent); transform: translateY(-2px); }
+        .social-btn.bilibili:hover { background: #FB7299; border-color: #FB7299; }
 
         .footer-text {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.75rem;
-            color: var(--color-text-muted);
-            padding-top: 16px;
+            text-align: center; margin-top: 20px; font-size: 0.75rem;
+            color: var(--color-text-muted); padding-top: 16px;
             border-top: 1px solid var(--color-border);
         }
 
@@ -344,17 +284,10 @@
         .modal-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 16px; }
 
         .confirm-link {
-            display: inline-block;
-            font-weight: 600;
-            word-break: break-all;
-            margin: 10px 0;
-            padding: 6px 16px;
-            border-radius: 20px;
-            text-decoration: none;
-            cursor: pointer;
-            color: #fff;
-            background: #DC2626;
-            transition: filter 0.2s;
+            display: inline-block; font-weight: 600; word-break: break-all;
+            margin: 10px 0; padding: 6px 16px; border-radius: 20px;
+            text-decoration: none; cursor: pointer; color: #fff;
+            background: #DC2626; transition: filter 0.2s;
         }
         .confirm-link:hover { filter: brightness(0.9); }
 
@@ -366,21 +299,21 @@
             font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none;
             transition: background var(--transition);
         }
-        .btn-cancel {
-            background: var(--color-card-bg-secondary); color: var(--color-text-secondary);
-        }
+        .btn-cancel { background: var(--color-card-bg-secondary); color: var(--color-text-secondary); }
         .btn-cancel:hover { background: #cbd5e1; }
-        .btn-confirm {
-            background: var(--color-primary); color: #fff;
-        }
+        .btn-confirm { background: var(--color-primary); color: #fff; }
         .btn-confirm:hover { filter: brightness(0.9); }
     </style>
 </head>
 <body>
+    <!-- 动态背景装饰（与寧雲名片完全一致） -->
+    <div class="bg-decoration bg-decoration--1" aria-hidden="true"></div>
+    <div class="bg-decoration bg-decoration--2" aria-hidden="true"></div>
+    <div class="bg-decoration bg-decoration--3" aria-hidden="true"></div>
+
     <main class="card">
         <div class="header">
             <div class="avatar-wrapper">
-                <!-- 头像图片命名为 ./avatar.jpg 放在同目录下 -->
                 <img class="avatar" src="./avatar.jpg" alt="之槐头像" 
                      onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
                 <div class="avatar-placeholder" style="display:none;">之槐</div>
@@ -449,7 +382,6 @@
 
         <div class="section-label">视频平台</div>
         <div class="social-links">
-            <!-- B站：加入 external-link 类用于二次确认 -->
             <a href="https://space.bilibili.com/2060315070" target="_blank" rel="noopener"
                class="social-btn bilibili external-link"
                data-confirm-title="即将前往B站"
@@ -478,7 +410,6 @@
 
     <script>
         (function() {
-            // === 外部链接确认弹窗 ===
             const confirmModal = document.getElementById('confirmModal');
             const confirmContent = document.getElementById('confirmContent');
             const confirmTitle = document.getElementById('confirmTitle');
